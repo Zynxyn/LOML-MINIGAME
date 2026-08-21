@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LOML Mini Game <3</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Trebuchet MS", Arial, sans-serif;
+        background: linear-gradient(135deg, #ffd6e7, #fff0f6, #e8d7ff);
+        color: #5a3a4e;
+        overflow-x: hidden;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 600px;
+        margin: auto;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 0;
+    }
+
+    .screen {
+        display: none;
+        width: 100%;
+        text-align: center;
+        animation: fadeIn .6s ease;
+    }
+
+    .screen.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    h1 {
+        font-size: 2.4rem;
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        margin-top: 5px;
+    }
+
+    .subtitle {
+        opacity: .75;
+        line-height: 1.6;
+    }
+
+    button {
+        border: none;
+        padding: 14px 24px;
+        border-radius: 30px;
+        background: #ff76a8;
+        color: white;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 15px;
+        box-shadow: 0 8px 18px rgba(255,118,168,.25);
+        transition: .25s;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+        background: #ff5c99;
+    }
+
+    /* COUPLE PHOTOS */
+
+    .couple {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 35px 0;
+    }
+
+    .photo {
+        width: 145px;
+        height: 145px;
+        border-radius: 25px;
+        object-fit: cover;
+        border: 6px solid white;
+        box-shadow: 0 10px 30px rgba(0,0,0,.12);
+    }
+
+    .photo:first-child {
+        transform: rotate(-7deg);
+    }
+
+    .photo:last-child {
+        transform: rotate(7deg);
+    }
+
+    .heart-between {
+        font-size: 45px;
+        margin: 0 -12px;
+        z-index: 2;
+        animation: heartbeat 1.2s infinite;
+    }
+
+    @keyframes heartbeat {
+        0%,100% { transform: scale(1); }
+        50% { transform: scale(1.25); }
+    }
+
+
+    /* ENVELOPE CARD */
+
+    .message-card {
+        background: rgba(255,255,255,.8);
+        backdrop-filter: blur(10px);
+        padding: 35px 25px;
+        border-radius: 25px;
+        min-height: 270px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: 0 15px 35px rgba(0,0,0,.10);
+        position: relative;
+    }
+
+    .number {
+        font-size: .9rem;
+        opacity: .5;
+        margin-bottom: 15px;
+    }
+
+    .emoji {
+        font-size: 55px;
+        margin-bottom: 15px;
+    }
+
+    #message {
+        font-size: 1.25rem;
+        line-height: 1.7;
+    }
+
+
+    /* PROGRESS */
+
+    .progress {
+        height: 10px;
+        background: rgba(255,255,255,.55);
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    #progressBar {
+        height: 100%;
+        width: 0;
+        background: #ff76a8;
+        transition: width .4s ease;
+    }
+
+
+    /* FINAL SCREEN */
+
+    .final-message {
+        background: white;
+        padding: 25px;
+        border-radius: 25px;
+        line-height: 1.8;
+        margin-top: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,.08);
+    }
+
+
+    /* FLOATING HEARTS */
+
+    .floating-heart {
+        position: fixed;
+        bottom: -40px;
+        pointer-events: none;
+        animation: floatUp linear forwards;
+        opacity: .55;
+    }
+
+    @keyframes floatUp {
+        to {
+            transform: translateY(-110vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- START SCREEN -->
+
+    <section id="startScreen" class="screen active">
+
+        <h1>Happy Birthday Milove BumBum 💗</h1>
+
+        <p class="subtitle">
+            I made you something small because sometimes you deserve a whole lot more and
+            I don't think normal messages are enough. hihi ^-^
+        </p>
+
+        <div class="couple">
+
+            <!-- CHANGE THESE IMAGE FILES -->
+
+            <img class="photo" src="zoe pic 1.jpg">
+            <div class="heart-between">💗</div>
+            <img class="photo" src="zoe pic 2.jpg">
+
+        </div>
+
+        <button onclick="startGame()">
+            Pindota pls pls pls pls pls 💗 😊
+        </button>
+
+    </section>
+
+
+
+    <!-- MESSAGE GAME -->
+
+    <section id="gameScreen" class="screen">
+
+        <div class="progress">
+            <div id="progressBar"></div>
+        </div>
+
+        <div class="message-card">
+
+            <div class="number" id="counter"></div>
+
+            <div class="emoji" id="emoji">💌</div>
+
+            <div id="message"></div>
+
+        </div>
+
+        <button onclick="nextMessage()" id="nextButton">
+            Next little thing 💗
+        </button>
+
+    </section>
+
+
+
+    <!-- ENDING -->
+
+    <section id="endScreen" class="screen">
+
+        <h1>And then there's us. 💗</h1>
+
+        <div class="couple">
+            <img class="photo" src="kobe pic 1.png">
+            <div class="heart-between">💕</div>
+            <img class="photo" src="zoe pic 3.jpg">
+        </div>
+
+        <div class="final-message">
+
+            I know this is just a silly little speedrun game,
+            but every word here is raw as it gets and this is not all that I wanted to say to you babe for real.
+
+            <br><br>
+
+            Thank you for being someone I can laugh with,
+            annoy, miss, talk to, LOVE, basically Thank you for being my other half.
+
+            <br><br>
+
+            Out of all the things that I wanted,
+            I'm really happy that life led me to you or this route happened. Because for the first time I knew what I want and that is to LOVE you endlessly. VOAH!
+
+            <br><br>
+
+            <b>I LOVE YOU MWA 💗</b>
+
+        </div>
+
+        <button onclick="restartGame()">
+            Play it again 🥺
+        </button>
+
+    </section>
+
+</div>
+
+
+<script>
+
+    /*
+    ============================================
+                 YOUR REAL MESSAGES
+    ============================================
+
+    Replace these with things YOU actually
+    want to tell her.
+
+    You can add as many as you want.
+    */
+
+    const messages = [
+
+        {
+            emoji: "🥺 😏",
+            text: "Hi babe, Happy Birthday mwaaaa. I made this speedrun mini game or the just click the game and read all the things I want to say to my LOML. dibadibadiba."
+        },
+
+        {
+            emoji: "😂 😅",
+            text: "To be honest I can't really articulate or like put into words or organize what I want to say to you inside my head, I just wanted you to know that I am madly in love with you and you deserve everything."
+        },
+
+        {
+            emoji: "🌷",
+            text: "Flowers for you sa oh hahaha. Bitaw I think katong gina ingon nila na phases sa relastionship sa ing ani na mga months I think we've done our part and maybe there's more that we dont know that is coming but hold my hand and we'll conquer it together."
+        },
+
+        {
+            emoji: "💭",
+            text: "There are days that I'm tired after work, stressed, or not feeling like myself, and somehow talking to you kinda like pulls me back to reality or pulls me out of my head. I hope you know and I think you do know how many times you saved me babe in everything. Seeing, touching, kissing, loving you every single day makes me wanna have powers you know and be like together forever."
+        },
+
+        {
+            emoji: "🤍",
+            text: "I love you for the big things, but I think I love you even more for all the tiny things you probably don't even notice you do. The things that made you not so confident or just by being existing babe literally I LOVE YOU ALWAYS BABE I'LL NEVER GET TIRED OF YOU I PROMISE AND YOU ALWAYS PUT THAT IN YOUR MIND BABE OMKAYYYY. I LOVE LOVING YOU ALWAYS IN ALL WAYS."
+        },
+
+        {
+            emoji: "🫶",
+            text: "I am so proud of you babe oy because I know, heard, felt, cried together the things we conquered especially the things you conquered alone, even during the times when you're not particularly proud of yourself. I will always be proud of you babe because I know you man the type of person you are babe hihi mwa."
+        },
+
+        {
+            emoji: "🏡",
+            text: "My solace, I am truly enamored saimo babe oy I am the most matured yet not matured man? guy? boy? when I am with you. I feel so safe when I'm with you the fact that I don't need to like use my other PALS (PERSONALITIES CREATED DUE TO THINGS I CONQUERED ALONE WHEN YOU'RE NOT WITH ME PA AND I KNOW SAD NA YOU KNOW HIHI MWA)"
+        },
+
+        {
+            emoji: "💗",
+            text: "It will always be you babe. I love you so much. Happy Birthday. Lets Enjoy Your Birthday Omkayyyy hihi anf next part ani na message kay in person na mwa!!"
+        }
+
+    ];
+
+
+    let currentMessage = 0;
+
+
+    function startGame() {
+
+        document
+            .getElementById("startScreen")
+            .classList.remove("active");
+
+        document
+            .getElementById("gameScreen")
+            .classList.add("active");
+
+        showMessage();
+    }
+
+
+    function showMessage() {
+
+        const item = messages[currentMessage];
+
+        document.getElementById("emoji").innerText =
+            item.emoji;
+
+        document.getElementById("message").innerText =
+            item.text;
+
+        document.getElementById("counter").innerText =
+            "Little thing " +
+            (currentMessage + 1) +
+            " of " +
+            messages.length;
+
+
+        const percentage =
+            ((currentMessage + 1) / messages.length) * 100;
+
+        document.getElementById("progressBar").style.width =
+            percentage + "%";
+
+
+        if (currentMessage === messages.length - 1) {
+
+            document.getElementById("nextButton").innerText =
+                "One last thing... 💌";
+
+        } else {
+
+            document.getElementById("nextButton").innerText =
+                "Next little thing 💗";
+        }
+    }
+
+
+    function nextMessage() {
+
+        if (currentMessage < messages.length - 1) {
+
+            currentMessage++;
+            showMessage();
+
+        } else {
+
+            document
+                .getElementById("gameScreen")
+                .classList.remove("active");
+
+            document
+                .getElementById("endScreen")
+                .classList.add("active");
+        }
+    }
+
+
+    function restartGame() {
+
+        currentMessage = 0;
+
+        document
+            .getElementById("endScreen")
+            .classList.remove("active");
+
+        document
+            .getElementById("startScreen")
+            .classList.add("active");
+    }
+
+
+    /* RANDOM FLOATING HEARTS */
+
+    setInterval(() => {
+
+        const heart = document.createElement("div");
+
+        heart.classList.add("floating-heart");
+
+        const heartChoices =
+            ["💗", "💕", "🤍", "🌷", "💖"];
+
+        heart.innerText =
+            heartChoices[
+                Math.floor(Math.random() * heartChoices.length)
+            ];
+
+        heart.style.left =
+            Math.random() * 100 + "vw";
+
+        heart.style.fontSize =
+            (15 + Math.random() * 25) + "px";
+
+        heart.style.animationDuration =
+            (4 + Math.random() * 4) + "s";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 8000);
+
+    }, 700);
+
+</script>
+
+</body>
+</html>
